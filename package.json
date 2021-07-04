@@ -1,0 +1,20 @@
+{
+  "name": "vk-api",
+  "version": "1.0.0",
+  "description": "request to vk api",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "keywords": ["mongo", "vk api"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "connect-mongo": "^4.4.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "nodemon": "^2.0.9"
+  }
+}
