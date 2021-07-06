@@ -22,8 +22,7 @@ module.exports = function (app) {
                 res.redirect('/')
             })
             .catch(function (error) {
-                console.log(error)
-                res.end('error')
+                res.json('error')
             });
     })
     app.get('/auth', (req, res) => {

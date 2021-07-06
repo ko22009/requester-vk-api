@@ -6,7 +6,10 @@
   "scripts": {
     "start": "nodemon"
   },
-  "keywords": ["mongo", "vk api"],
+  "keywords": [
+    "mongo",
+    "vk api"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
