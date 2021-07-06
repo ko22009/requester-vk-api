@@ -1,4 +1,4 @@
-#Requester to vk api
+#Requester to vk api. user + group
 * mongoDB (for persistence session)  
 * express
 * axios
