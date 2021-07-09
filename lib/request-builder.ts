@@ -1,4 +1,4 @@
-import {ParamsBuilder} from './params-builder'
+import ParamsBuilder from './params-builder'
 import {AxiosResponse} from 'axios';
 import FormData from 'form-data'
 

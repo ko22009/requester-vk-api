@@ -1,10 +1,7 @@
-import {RequesterVKInstance} from '@/requester-vk';
-import {RequestBuilderInstance} from '@/request-builder';
-
-const {RequesterVK} = require('./../requester-vk');
-const {RequestBuilder} = require('./../request-builder');
-const {Listener} = require('./listener');
-const {listeners} = require('./listeners')
+import {RequesterVK} from '@/requester-vk';
+import {RequestBuilderInstance, RequestBuilder} from '@/request-builder';
+import {Listener} from './listener';
+import {listeners} from './listeners';
 
 type getLongPollServer = {
     server: string,
@@ -15,7 +12,7 @@ type getLongPollServer = {
 export class Polling {
     private group_id: string;
     private group_token: string;
-    private requesterVK: RequesterVKInstance;
+    private requesterVK: InstanceType<typeof RequesterVK>;
     private listener: InstanceType<typeof Listener>;
 
     constructor(group_id: string, group_token: string) {

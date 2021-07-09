@@ -1,4 +1,4 @@
-export class ParamsBuilder {
+export default class ParamsBuilder {
     private params: object;
     constructor(params: object) {
         this.params = params

@@ -1,10 +1,6 @@
 import {AxiosResponse} from 'axios';
 
-const {RequestBuilder} = require('./request-builder');
-
-export interface RequesterVKInstance {
-  request<T = any, R = AxiosResponse<T>>(method: string, params: object): Promise<R>;
-}
+import {RequestBuilder} from './request-builder';
 
 export class RequesterVK {
     private readonly token: string;
@@ -15,7 +11,7 @@ export class RequesterVK {
         this.version = process.env.version
     }
 
-    request(method: string, params: object) {
+    request<T = any, R = AxiosResponse<T>>(method: string, params: object): Promise<R> {
         const url = `https://api.vk.com/method/${method}`
         const defaultParams = {
             access_token: this.token,

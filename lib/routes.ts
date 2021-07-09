@@ -1,11 +1,9 @@
-import {Application, NextFunction, Request, Response} from 'express';
-import {RequesterVKInstance} from '@/requester-vk';
+import {Express, NextFunction, Request, Response} from 'express';
+import {RequesterVK} from './requester-vk';
+import ParamsBuilder from './params-builder';
+import {RequestBuilder} from './request-builder';
 
-const ParamsBuilder = require('./params-builder');
-const RequestBuilder = require('./request-builder');
-const RequesterVK = require('./requester-vk');
-
-export function routes (app: Application) {
+export function routes(app: Express) {
 
     function authorizedMiddleware(req: Request, res: Response, next: NextFunction) {
         if (req.session.access_token) {
@@ -14,6 +12,7 @@ export function routes (app: Application) {
             res.send('no token. please go to <a href="/auth">auth</a>')
         }
     }
+
     const host = process.env.host
     const callback_auth = process.env.callback_method
     const redirect_uri = `${host}/${callback_auth}`
@@ -51,7 +50,7 @@ export function routes (app: Application) {
     })
 
     app.get('/request/:method', authorizedMiddleware, (req, res) => {
-        (new RequesterVK(req.session.access_token) as RequesterVKInstance)
+        (new RequesterVK(req.session.access_token))
             .request(req.params.method, req.query)
             .then(response => res.json(response.data))
             .catch(error => res.json(error));

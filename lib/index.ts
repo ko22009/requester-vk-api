@@ -1,9 +1,9 @@
 require('dotenv').config();
-const express = require('express')
-const session = require('express-session')
-const MongoStore = require('connect-mongo');
-const {routes} = require('./routes')
-const {polling} = require('./pollings')
+import express from 'express'
+import session from'express-session'
+import MongoStore from 'connect-mongo';
+import {routes} from'@/routes'
+import {polling} from '@/pollings'
 const app = express()
 
 app.use(session({
