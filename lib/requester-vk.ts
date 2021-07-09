@@ -1,12 +1,21 @@
-const RequestBuilder = require('./request-builder');
+import {AxiosResponse} from 'axios';
 
-class RequesterVK {
-    constructor(token) {
+const {RequestBuilder} = require('./request-builder');
+
+export interface RequesterVKInstance {
+  request<T = any, R = AxiosResponse<T>>(method: string, params: object): Promise<R>;
+}
+
+export class RequesterVK {
+    private readonly token: string;
+    private readonly version: string | undefined;
+
+    constructor(token: string) {
         this.token = token
         this.version = process.env.version
     }
 
-    request(method, params) {
+    request(method: string, params: object) {
         const url = `https://api.vk.com/method/${method}`
         const defaultParams = {
             access_token: this.token,
@@ -15,16 +24,15 @@ class RequesterVK {
         return (new RequestBuilder(url, {...defaultParams, ...params})).post()
     }
 
-    sendMessage(params) {
+    sendMessage(params: object) {
         return this.request('messages.send', {
             ...params,
             random_id: Date.now() + Math.random()
         })
     }
 
-    sendMessageEvent(params) {
+    sendMessageEvent(params: object) {
         return this.request('messages.sendMessageEventAnswer', params)
     }
 }
 
-module.exports = RequesterVK

@@ -1,10 +1,19 @@
-const ParamsBuilder = require('./params-builder');
-const FormData = require('form-data');
+import {ParamsBuilder} from './params-builder'
+import {AxiosResponse} from 'axios';
+import FormData from 'form-data'
 
 const axios = require('axios');
 
-class RequestBuilder {
-    constructor(url, params) {
+export interface RequestBuilderInstance {
+  get<T = any, R = AxiosResponse<T>>(): Promise<R>;
+  post<T = any, R = AxiosResponse<T>>(): Promise<R>;
+}
+
+export class RequestBuilder {
+    private url: string;
+    private params: Record<string, any>;
+
+    constructor(url: string, params: object) {
         this.url = url;
         this.params = params;
     }
@@ -23,5 +32,3 @@ class RequestBuilder {
         })
     }
 }
-
-module.exports = RequestBuilder

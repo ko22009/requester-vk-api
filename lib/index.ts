@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
+const {routes} = require('./routes')
+const {polling} = require('./pollings')
 const app = express()
 
 app.use(session({
@@ -12,9 +14,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-
-require('./routes')(app)
-require('./pollings')()
+routes(app)
+polling()
 
 app.listen(80, () => {
     console.log(`Example app listening at http://localhost`)

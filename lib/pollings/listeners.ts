@@ -1,8 +1,19 @@
-function listeners(listener, requesterVK) {
+import {Listener} from '@/pollings/listener';
+import {RequesterVK} from '@/requester-vk';
+
+export function listeners(listener: Listener, requesterVK: RequesterVK) {
     listener.addCommand('/start', function (update) {
         requesterVK.sendMessage({
             peer_id: update.object.message.peer_id,
             message: 'test'
+        });
+    })
+    listener.addCommand('photo', function (attachment) {
+        const photo = attachment.photo
+        const link = `photo${photo.owner_id}_${photo.id}_${photo.access_key}`
+        requesterVK.sendMessage({
+            peer_id: photo.owner_id,
+            attachment: link
         });
     })
     listener.addCommand('/time', function (update) {
@@ -54,5 +65,3 @@ function listeners(listener, requesterVK) {
         });
     })
 }
-
-module.exports = listeners

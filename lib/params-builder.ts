@@ -1,5 +1,6 @@
-class ParamsBuilder {
-    constructor(params) {
+export class ParamsBuilder {
+    private params: object;
+    constructor(params: object) {
         this.params = params
     }
 
@@ -8,4 +9,3 @@ class ParamsBuilder {
     }
 }
 
-module.exports = ParamsBuilder
