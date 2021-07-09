@@ -1,8 +1,8 @@
-import ParamsBuilder from './params-builder'
-import {AxiosResponse} from 'axios';
-import FormData from 'form-data'
+import ParamsBuilder from "./params-builder";
+import { AxiosResponse } from "axios";
+import FormData from "form-data";
 
-const axios = require('axios');
+const axios = require("axios");
 
 export interface RequestBuilderInstance {
   get<T = any, R = AxiosResponse<T>>(): Promise<R>;
@@ -10,25 +10,25 @@ export interface RequestBuilderInstance {
 }
 
 export class RequestBuilder {
-    private url: string;
-    private params: Record<string, any>;
+  private url: string;
+  private params: Record<string, any>;
 
-    constructor(url: string, params: object) {
-        this.url = url;
-        this.params = params;
-    }
+  constructor(url: string, params: object) {
+    this.url = url;
+    this.params = params;
+  }
 
-    get() {
-        return axios.get(`${this.url}?${new ParamsBuilder(this.params)}`)
-    }
+  get() {
+    return axios.get(`${this.url}?${new ParamsBuilder(this.params)}`);
+  }
 
-    post() {
-        const formData = new FormData()
-        Object.keys(this.params).forEach((key) => {
-            formData.append(key, this.params[key])
-        })
-        return axios.post(this.url, formData, {
-            headers: formData.getHeaders()
-        })
-    }
+  post() {
+    const formData = new FormData();
+    Object.keys(this.params).forEach((key) => {
+      formData.append(key, this.params[key]);
+    });
+    return axios.post(this.url, formData, {
+      headers: formData.getHeaders(),
+    });
+  }
 }
