@@ -29,13 +29,8 @@ export class Listener {
     if (update.object.payload) {
       name = update.object.payload.name;
     }
-    for (const listener in listeners) {
-      if (
-        !name.includes(listener) ||
-        !(listeners[listener] instanceof Function)
-      )
-        continue;
-      listeners[listener](update);
+    if (listeners[name] instanceof Function) {
+      listeners[name](update);
     }
     if (update.object.message && update.object.message.attachments) {
       update.object.message.attachments.forEach((attachment: any) => {

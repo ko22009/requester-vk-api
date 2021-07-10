@@ -1,36 +1,68 @@
 import { AxiosResponse } from "axios";
 
-import { RequestBuilder } from "./request-builder";
+import { RequestBuilder } from "@/request-builder";
+import { Params } from "@/params-builder";
 
-export class RequesterVK {
-  private readonly token: string;
+export type VKResponse = {
+  response: {
+    [key: string]: string;
+  };
+};
+
+export type VKError = {
+  error: {
+    error_code: number;
+    error_msg: string;
+    request_params: Params[];
+  };
+};
+
+export interface RequesterVKInstance {
+  request(method: string, params: Params): Promise<AxiosResponse<VKResponse>>;
+
+  sendMessage(param: Params): void;
+
+  sendMessageEvent(param: Params): void;
+}
+
+export class RequesterVK implements RequesterVKInstance {
+  private readonly token: string | undefined;
   private readonly version: string | undefined;
+  private readonly defaultParams: {
+    access_token: string | undefined;
+    v: string | undefined;
+  };
 
-  constructor(token: string) {
+  constructor(token: string | undefined) {
     this.token = token;
     this.version = process.env.version;
-  }
-
-  request<T = any, R = AxiosResponse<T>>(
-    method: string,
-    params: object
-  ): Promise<R> {
-    const url = `https://api.vk.com/method/${method}`;
-    const defaultParams = {
+    this.defaultParams = {
       access_token: this.token,
       v: this.version,
     };
-    return new RequestBuilder(url, { ...defaultParams, ...params }).post();
   }
 
-  sendMessage(params: object) {
-    return this.request("messages.send", {
+  request(method: string, params: Params): Promise<AxiosResponse<VKResponse>> {
+    const url = `https://api.vk.com/method/${method}`;
+    const builder = new RequestBuilder(url, {
+      ...this.defaultParams,
       ...params,
-      random_id: Date.now() + Math.random(),
+    });
+    return builder.post<VKResponse & VKError>().then((response) => {
+      return new Promise((resolve, reject) =>
+        response.data.error ? reject(response) : resolve(response)
+      );
     });
   }
 
-  sendMessageEvent(params: object) {
+  sendMessage(params: Params) {
+    return this.request("messages.send", {
+      ...params,
+      random_id: (Date.now() + Math.random()).toString(),
+    });
+  }
+
+  sendMessageEvent(params: Params) {
     return this.request("messages.sendMessageEventAnswer", params);
   }
 }

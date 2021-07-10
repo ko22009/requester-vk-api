@@ -1,21 +1,22 @@
-import { RequesterVK } from "@/requester-vk";
+import { RequesterVK, RequesterVKInstance, VKError } from "@/requester-vk";
 import { RequestBuilderInstance, RequestBuilder } from "@/request-builder";
 import { Listener } from "./listener";
 import { listeners } from "./listeners";
+import axios, { AxiosError } from "axios";
 
 type getLongPollServer = {
   server: string;
   key: string;
-  ts: number;
+  ts: string;
 };
 
 export class Polling {
-  private group_id: string;
-  private group_token: string;
-  private requesterVK: InstanceType<typeof RequesterVK>;
+  private group_id: string | undefined;
+  private group_token: string | undefined;
+  private requesterVK: RequesterVKInstance;
   private listener: InstanceType<typeof Listener>;
 
-  constructor(group_id: string, group_token: string) {
+  constructor(group_id: string | undefined, group_token: string | undefined) {
     this.group_id = group_id;
     this.group_token = group_token;
     this.requesterVK = new RequesterVK(group_token);
@@ -30,9 +31,15 @@ export class Polling {
       })
       .then((response) => {
         listeners(this.listener, this.requesterVK);
-        this.poll(response.data.response);
+        this.poll(<getLongPollServer>response.data.response);
       })
-      .catch((error) => console.log(error));
+      .catch((error: VKError | AxiosError) => {
+        if (axios.isAxiosError(error)) {
+          console.log(error);
+        } else {
+          console.log(error);
+        }
+      });
   }
 
   poll({ server, key, ts }: getLongPollServer) {
@@ -40,7 +47,7 @@ export class Polling {
       act: "a_check",
       key: key,
       ts: ts,
-      wait: 25,
+      wait: "25",
     };
     const httpBuilder: RequestBuilderInstance = new RequestBuilder(
       server,
@@ -54,6 +61,12 @@ export class Polling {
         });
         this.poll({ server, key, ts: response.data.ts });
       })
-      .catch((error) => console.log(error));
+      .catch((error: VKError | AxiosError) => {
+        if (axios.isAxiosError(error)) {
+          console.log(error);
+        } else {
+          console.log(error);
+        }
+      });
   }
 }

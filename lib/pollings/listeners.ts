@@ -1,7 +1,10 @@
 import { Listener } from "@/pollings/listener";
-import { RequesterVK } from "@/requester-vk";
+import { RequesterVKInstance } from "@/requester-vk";
 
-export function listeners(listener: Listener, requesterVK: RequesterVK) {
+export function listeners(
+  listener: Listener,
+  requesterVK: RequesterVKInstance
+) {
   listener.addCommand("/start", function (update) {
     requesterVK.sendMessage({
       peer_id: update.object.message.peer_id,
